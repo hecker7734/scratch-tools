@@ -31,7 +31,7 @@
                         zip.generateAsync({type:"blob"})
                             .then(function(updatedBlob) {
                                 // Save the updated blob as a .zip file with "_conv" appended to the name
-                                saveAs(updatedBlob, file.name.replace('.sb3', '_CodebGONE.sb3'));
+                                saveAs(updatedBlob, file.name.replace('.sb3', '_codeBgone.sb3'));
                             })
                             .catch(function(error) {
                                 console.error('Error generating updated .zip file:', error);
