@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homepage</title>
+    <style>
+        /* Add your CSS styles here for homepage UI */
+        body {
+            background: radial-gradient(circle, #333333, #000000);
+            height: 100vh;
+            display: flex;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .homepage-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .homepage-buttons a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px #007bff solid;
+            border-radius: 16px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            max-width: 200px;
+            box-shadow: 0px 0px 10px #fff;
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+
+        .homepage-buttons a:hover {
+            background-color: #237bda;
+            box-shadow: 0px 0px 20px #fff;
+        }
+
+        .button:hover .tooltip {
+          visibility: visible;
+          opacity: 1;
+        }
+        .tooltip {
+          visibility: hidden;
+          opacity: 0;
+          background-color: #FFFFFF;
+          color: #333333;
+          font-size: 14px;
+          padding: 5px 10px;
+          border-radius: 4px;
+          position: absolute;
+          bottom: calc(100% + 5px);
+          left: 50%;
+          transform: translateX(-50%);
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+          white-space: nowrap;
+        }
+        
+        .tooltip-right {
+          bottom: auto;
+          top: 50%;
+          left: calc(100% - 45.5%);
+          transform: translateY(-75%);
+          max-width: 150px; /* Set the maximum width for the tooltip */
+          white-space: normal; /* Prevent text from wrapping */
+          overflow: hidden; /* Hide overflowed text */
+          text-overflow: clip; /* Clip text when it reaches the end */
+          top: calc(50% - 1.5em); /* Adjust top position based on text length */
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .toolstitle {
+            text-align: center;
+            top: -2%;
+            left: 0%;
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolstitle"><h2>Scratch Tools - Homepage</h2></div><br>
+    <div class="homepage-buttons">
+        <div class="container">
+
+    </div>
+</body>
+<script>
+    const buttons = [
+      {
+        text: "codeBgone",
+        link: "https://example.com/aaaaaaa",
+        tooltip: "Want your scratch projects code to be gone! No Not really? at least make it invisible right? people cannot steal what they cannot see.",
+      },
+      {
+        text: "Not Here Yet...",
+        link: "/error",
+        tooltip: "This button does nothing...",
+      },
+    ];
+
+    function generateButtons() {
+      const container = document.getElementsByClassName("container")[0]; 
+
+      for (let i = 0; i < buttons.length; i++) {
+        const button = document.createElement("a");
+        button.textContent = buttons[i].text;
+        button.href = buttons[i].link;
+        button.className = "button";
+        button.style.marginRight = "10px";
+       // button.setAttribute("target","_blank"); comment out ATTRIB
+
+        const tooltip = document.createElement("span");
+        tooltip.textContent = buttons[i].tooltip;
+        tooltip.className = "tooltip tooltip-right";
+        button.appendChild(tooltip);
+
+        container.appendChild(button);
+
+        button.addEventListener("mouseover", function () {
+            const rect = button.getBoundingClientRect();
+            tooltip.style.top = rect.top + rect.height / 2 + "px";
+            tooltip.style.left = rect.right + "px";
+        });
+      }
+    }
+
+    generateButtons();
+</script>
+</html>

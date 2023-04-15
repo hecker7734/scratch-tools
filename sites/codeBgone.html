@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div class="toolstitle"><h2>Scratch Tools - Homepage</h2></div><br>
+    <title>SB3 - Code Be Gone!</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.3.0/jszip.min.js"></script> <!--API-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script> <!--API-->
+    <script>
+    function handleFileSelect(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        var files = evt.target.files;
+        var file = files[0];
+
+        // Check if the uploaded file has .sb3 extension
+        if (file.name.endsWith('.sb3')) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var contents = e.target.result;
+                var zip = new JSZip();
+                zip.loadAsync(contents)
+                    .then(function(zip) {
+                        return zip.file('project.json').async('text');
+                    })
+                    .then(function(contents) {
+                        // Replace "shadow":false with "shadow":true using regex
+                        contents = contents.replace(/"shadow":\s*false/g, '"shadow": true');
+                        // Update the project.json contents in the zip object
+                        zip.file('project.json', contents);
+                        // Generate a new blob with the updated zip contents
+                        zip.generateAsync({type:"blob"})
+                            .then(function(updatedBlob) {
+                                // Save the updated blob as a .zip file with "_conv" appended to the name
+                                saveAs(updatedBlob, file.name.replace('.sb3', '_CodebGONE.sb3'));
+                            })
+                            .catch(function(error) {
+                                console.error('Error generating updated .zip file:', error);
+                            });
+                    })
+                    .catch(function(error) {
+                        console.error('Error reading .sb3 file:', error);
+                    });
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            console.error('Invalid file type. Please choose a .sb3 file.');
+        }
+    }
+    </script>
+</head>
+<body>
+    <h2 class="toolstitle">Scratch Tools - Homepage</h2><br>
+    <h1>Sb3, Code Be Gone!</h1><hr>
+    <p>Warning:<p> <ol>
+        <li>This could go against scratch's rules.</li>
+        <li>projects will become uneditable after this.</li>
+        <li>*Code* Not Sprites, will become invisible.</li>
+        <li>after uploading your .sb3 a new one will download as *filename*_codeBgone.sb3</li>
+        <li>make sure to keep a backup unless you want to start back from *scratch*, get it?</li>
+    </ol> 
+    <hr>
+    <center>
+    <label for="fileInput" class="upload-btn">Upload</label>
+    <input type="file" id="fileInput">
+    </center>
+    <script>
+        // Add event listener for file input change
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+    </script>
+    <style>
+        .toolstitle {
+            justify-content: normal;
+            align-items: normal;
+            text-align: center;
+            top: -2%;
+            left: 0%;
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+            position: absolute;
+        }
+        body {
+            background: radial-gradient(circle, #333333, #000000);
+            height: 90vh;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+        }
+        
+        .file-upload-form {
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #525252;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-upload-form input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-form label {
+            display: block;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .file-upload-form label:hover {
+            background-color: #0056b3;
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+        }
+        
+        .file-upload-form input[type="file"]:focus + label {
+            outline: none;
+            box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+        }
+        
+        .file-upload-form p {
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+        }
+        
+        .file-upload-form pre {
+            font-size: 13px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+        p{
+            display: inline-block;
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+        }
+        ol{
+            color: #FFFFFF;
+            text-shadow: 0px 0px 20px #FFFFFF;
+        }
+        .upload-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px #007bff;
+            border-radius: 16px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            max-width: 200px;
+        }
+
+        .upload-btn:hover {
+            background-color: #237bda;
+            box-shadow: 0px 0px 20px #fff;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+
+
+<script></script></body>
