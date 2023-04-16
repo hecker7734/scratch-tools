@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scratch SB3 JSON Editor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script> <!-- Include JSZip library from CDN -->
+</head>
+<body>
+  <h1>Scratch SB3 JSON Editor</h1>
+  <form id="uploadForm">
+    <label for="sb3File">Upload SB3 file:</label>
+    <input type="file" id="sb3File" accept=".sb3">
+    <button type="submit">Upload</button>
+  </form>
+  <div id="jsonContent" style="width:100%; height:100%; white-space:pre-wrap; border:1px solid black;" contenteditable="true"></div> <!-- Add contenteditable attribute -->
+  <button id="saveButton" disabled>Save</button>
+  <a href="#" id="downloadLink" download="modified_project.json" style="display:none">Download</a>
+
+  <script>
+    // Function to search for repeated words and highlight them in yellow
+    function searchAndHighlight() {
+// Get the content of the div element
+const content = document.getElementById('jsonContent').innerText;
+
+// Split the content by "},"
+const parts = content.split('},');
+
+// Loop through the parts and check for ": {"
+for (let i = 0; i < parts.length; i++) {
+  const part = parts[i];
+
+  // Check if the part ends with ": {"
+  if (part.endsWith('": {')) {
+    // Extract the ID by finding the string between the last occurrence of "}" and ": {"
+    const startIndex = part.lastIndexOf('}') + 1;
+    const endIndex = part.indexOf(': {') + 2;
+    const id = part.substring(startIndex, endIndex);
+
+    // Escape special characters in the ID
+    const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Highlight the entire ID with yellow background color
+    const regex = new RegExp(escapedId, 'g');
+    const replacedPart = part.replace(regex, `<span style="background-color: yellow;">${id}</span>`);
+    parts[i] = replacedPart;
+  }
+}
+
+// Join the parts back to the content
+const replacedContent = parts.join('},');
+
+// Set the updated content to the div element
+document.getElementById('jsonContent').innerHTML = replacedContent;
+
+}
+
+
+
+
+
+
+    // Add event listener for form submit
+    document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('sb3File');
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const arrayBuffer = e.target.result;
+        const zip = await JSZip.loadAsync(arrayBuffer);
+        const content = await zip.file('project.json').async('string');
+        const beautifiedContent = JSON.stringify(JSON.parse(content), null, 2); // Beautify JSON content
+        document.getElementById('jsonContent').innerText = beautifiedContent; // Set plain text content
+        document.getElementById('saveButton').removeAttribute('disabled');
+        searchAndHighlight(); // Call the searchAndHighlight function
+      }
+      reader.readAsArrayBuffer(file);
+    });
+
+    // Add event listener for save button click
+    document.getElementById('saveButton').addEventListener('click', function() {
+      const content = document.getElementById('jsonContent').innerText; // Get plain text content
+      const data = "data:text/json;charset=utf-8," + encodeURIComponent(content);
+      const downloadLink = document.getElementById('downloadLink');
+      downloadLink.setAttribute('href', data);
+      downloadLink.style.display = 'block';
+      downloadLink.click();
+    });
+  </script>
+</body>
+<style>
+#jsonContent[contenteditable="true"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+#jsonContent{
+    height: 100%;
+}
+</style>
+
+</html>
+
+
+
